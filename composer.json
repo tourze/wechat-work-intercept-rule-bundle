@@ -30,7 +30,8 @@
     "tourze/http-client-bundle": "0.1.*",
     "tourze/symfony-cron-job-bundle": "0.1.*",
     "tourze/wechat-work-bundle": "0.1.*",
-    "tourze/wechat-work-contracts": "0.0.*"
+    "tourze/wechat-work-contracts": "0.0.*",
+    "tourze/wechat-work-jssdk-bundle": "0.1.*"
   },
   "require-dev": {
     "phpstan/phpstan": "^2.1",
