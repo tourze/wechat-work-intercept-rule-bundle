@@ -7,7 +7,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Tourze\DoctrineAsyncBundle\Service\DoctrineService;
+use Tourze\DoctrineDirectInsertBundle\Service\DirectInsertService;
 use Tourze\Symfony\CronJob\Attribute\AsCronTask;
 use WechatWorkBundle\Repository\AgentRepository;
 use WechatWorkBundle\Service\WorkService;
@@ -25,7 +25,7 @@ class SyncInterceptRuleCommand extends Command
         private readonly AgentRepository $agentRepository,
         private readonly InterceptRuleRepository $ruleRepository,
         private readonly WorkService $workService,
-        private readonly DoctrineService $doctrineService,
+        private readonly DirectInsertService $directInsertService,
     ) {
         parent::__construct();
     }
@@ -65,7 +65,7 @@ class SyncInterceptRuleCommand extends Command
                     $item->setApplicableUserList($detail['applicable_range']['user_list']);
                     $item->setApplicableDepartmentList($detail['applicable_range']['department_list']);
                     $item->setSync(true);
-                    $this->doctrineService->directInsert($item); // 直接插入
+                    $this->directInsertService->directInsert($item); // 直接插入
                 }
             }
         }
