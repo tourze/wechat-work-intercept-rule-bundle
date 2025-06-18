@@ -5,6 +5,7 @@ namespace WechatWorkInterceptRuleBundle\EventSubscriber;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Events;
 use Psr\Log\LoggerInterface;
+use WechatWorkBundle\Entity\Agent;
 use WechatWorkBundle\Service\WorkService;
 use WechatWorkInterceptRuleBundle\Entity\InterceptRule;
 use WechatWorkInterceptRuleBundle\Request\AddInterceptRuleRequest;
@@ -33,16 +34,18 @@ class InterceptRuleListener
         }
 
         $request = new AddInterceptRuleRequest();
-        $request->setAgent($rule->getAgent());
+        /** @var Agent|null $agent */
+        $agent = $rule->getAgent();
+        $request->setAgent($agent);
         $request->setRuleName($rule->getName());
         $request->setWordList($rule->getWordList());
-        $request->setInterceptType($rule->getInterceptType()->value);
+        $request->setInterceptType((int)$rule->getInterceptType()->value);
         $request->setSemanticsList($rule->getSemanticsList() ?: []);
 
-        if ($rule->getApplicableUserList()) {
+        if (!empty($rule->getApplicableUserList())) {
             $request->setApplicableUserList($rule->getApplicableUserList());
         }
-        if ($rule->getApplicableDepartmentList()) {
+        if (!empty($rule->getApplicableDepartmentList())) {
             $request->setApplicableDepartmentList($rule->getApplicableDepartmentList());
         }
 
@@ -65,23 +68,27 @@ class InterceptRuleListener
         }
 
         // 没规则的话，我们创建一次
-        if (!$rule->getRuleId()) {
+        if ($rule->getRuleId() === null) {
             $this->prePersist($rule);
 
             return;
         }
 
         $request = new UpdateInterceptRuleRequest();
-        $request->setAgent($rule->getAgent());
+        /** @var Agent|null $agent */
+        $agent = $rule->getAgent();
+        $request->setAgent($agent);
         $request->setRuleId($rule->getRuleId());
         $request->setRuleName($rule->getName());
         $request->setWordList($rule->getWordList());
-        $request->setInterceptType($rule->getInterceptType()->value);
+        $request->setInterceptType((int)$rule->getInterceptType()->value);
         $request->setSemanticsList($rule->getSemanticsList() ?: []);
 
         // 编辑的话，需要进行一次对比
         $detailRequest = new GetInterceptRuleDetailRequest();
-        $detailRequest->setAgent($rule->getAgent());
+        /** @var Agent|null $agent */
+        $agent = $rule->getAgent();
+        $detailRequest->setAgent($agent);
         $detailRequest->setRuleId($rule->getRuleId());
         $detail = $this->workService->request($detailRequest)['rule'];
 
@@ -104,7 +111,7 @@ class InterceptRuleListener
      */
     public function postRemove(InterceptRule $object): void
     {
-        if (!$object->getRuleId()) {
+        if ($object->getRuleId() === null) {
             $this->logger->debug('无远程规则id，跳过', [
                 'rule' => $this,
             ]);
@@ -114,7 +121,9 @@ class InterceptRuleListener
 
         $request = new DeleteInterceptRuleRequest();
         $request->setRuleId($object->getRuleId());
-        $request->setAgent($object->getAgent());
+        /** @var Agent|null $agent */
+        $agent = $object->getAgent();
+        $request->setAgent($agent);
         try {
             $this->workService->request($request);
         } catch (\Throwable $exception) {

@@ -53,12 +53,12 @@ class SyncInterceptRuleCommand extends Command
                     'corp' => $agent->getCorp(),
                     'ruleId' => $arr['rule_id'],
                 ]);
-                if (!$item) {
+                if ($item === null) {
                     $item = new InterceptRule();
                     $item->setCorp($agent->getCorp());
                     $item->setAgent($agent);
                     $item->setRuleId($arr['rule_id']);
-                    $item->setCreateTime(Carbon::createFromTimestamp($arr['create_time'], date_default_timezone_get()));
+                    $item->setCreateTime(Carbon::createFromTimestamp($arr['create_time'], date_default_timezone_get())->toDateTimeImmutable());
                     $item->setName($arr['rule_name']);
                     $item->setWordList($detail['word_list']);
                     $item->setInterceptType(InterceptType::tryFrom($detail['intercept_type']));
