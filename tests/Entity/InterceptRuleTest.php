@@ -367,7 +367,7 @@ class InterceptRuleTest extends TestCase
 
     public function test_setCreateTime_withValidDateTime_setsTimeCorrectly(): void
     {
-        $createTime = new \DateTime('2024-01-01 08:00:00');
+        $createTime = new \DateTimeImmutable('2024-01-01 08:00:00');
         
         $this->interceptRule->setCreateTime($createTime);
         
@@ -376,7 +376,7 @@ class InterceptRuleTest extends TestCase
 
     public function test_setCreateTime_withNull_setsNull(): void
     {
-        $this->interceptRule->setCreateTime(new \DateTime());
+        $this->interceptRule->setCreateTime(new \DateTimeImmutable());
         
         $this->interceptRule->setCreateTime(null);
         
@@ -385,7 +385,7 @@ class InterceptRuleTest extends TestCase
 
     public function test_setUpdateTime_withValidDateTime_setsTimeCorrectly(): void
     {
-        $updateTime = new \DateTime('2024-01-30 18:30:00');
+        $updateTime = new \DateTimeImmutable('2024-01-30 18:30:00');
         
         $this->interceptRule->setUpdateTime($updateTime);
         
@@ -394,7 +394,7 @@ class InterceptRuleTest extends TestCase
 
     public function test_setUpdateTime_withNull_setsNull(): void
     {
-        $this->interceptRule->setUpdateTime(new \DateTime());
+        $this->interceptRule->setUpdateTime(new \DateTimeImmutable());
         
         $this->interceptRule->setUpdateTime(null);
         
@@ -415,8 +415,8 @@ class InterceptRuleTest extends TestCase
         $semanticsList = ['semantic_1', 'semantic_2'];
         $userList = ['user_001', 'user_002'];
         $departmentList = [1, 2, 3];
-        $createTime = new \DateTime('2024-01-01 08:00:00');
-        $updateTime = new \DateTime('2024-01-30 18:00:00');
+        $createTime = new \DateTimeImmutable('2024-01-01 08:00:00');
+        $updateTime = new \DateTimeImmutable('2024-01-30 18:00:00');
         
         $result = $this->interceptRule
             ->setCorp($corp)
@@ -491,7 +491,7 @@ class InterceptRuleTest extends TestCase
     public function test_edgeCases_dateTimeTypes(): void
     {
         // 测试DateTime
-        $dateTime = new \DateTime('2024-01-15 12:30:45');
+        $dateTime = new \DateTimeImmutable('2024-01-15 12:30:45');
         $this->interceptRule->setCreateTime($dateTime);
         $this->assertSame($dateTime, $this->interceptRule->getCreateTime());
         
@@ -551,7 +551,7 @@ class InterceptRuleTest extends TestCase
         /** @var AgentInterface&MockObject $agent */
         $agent = $this->createMock(AgentInterface::class);
         
-        $createTime = new \DateTime('2024-01-15 10:00:00');
+        $createTime = new \DateTimeImmutable('2024-01-15 10:00:00');
         $wordList = ['违禁词', '敏感内容', '不当言论'];
         
         // 模拟基础敏感词规则创建
@@ -668,8 +668,8 @@ class InterceptRuleTest extends TestCase
 
     public function test_businessScenario_ruleSyncFlow(): void
     {
-        $createTime = new \DateTime('2024-01-15 08:00:00');
-        $updateTime = new \DateTime('2024-01-15 10:30:00');
+        $createTime = new \DateTimeImmutable('2024-01-15 08:00:00');
+        $updateTime = new \DateTimeImmutable('2024-01-15 10:30:00');
         
         // 模拟规则同步流程
         $this->interceptRule

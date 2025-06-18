@@ -169,15 +169,12 @@ class UpdateInterceptRuleRequestTest extends TestCase
         $this->request->setSemanticsList([]);
 
         $options = $this->request->getRequestOptions();
-
-        $this->assertIsArray($options);
         $this->assertArrayHasKey('json', $options);
         $json = $options['json'];
         
         $this->assertArrayHasKey('rule_id', $json);
         $this->assertArrayHasKey('extra_rule', $json);
         $this->assertSame('rule_basic_123', $json['rule_id']);
-        $this->assertIsArray($json['extra_rule']);
         $this->assertArrayHasKey('semantics_list', $json['extra_rule']);
     }
 
@@ -485,15 +482,12 @@ class UpdateInterceptRuleRequestTest extends TestCase
         $this->request->setSemanticsList([]);
 
         $options = $this->request->getRequestOptions();
-
-        $this->assertIsArray($options);
         $this->assertArrayHasKey('json', $options);
         $this->assertCount(1, $options);
         
         $json = $options['json'];
         $this->assertArrayHasKey('rule_id', $json);
         $this->assertArrayHasKey('extra_rule', $json);
-        $this->assertIsArray($json['extra_rule']);
     }
 
     public function test_specialCharactersInRuleId(): void

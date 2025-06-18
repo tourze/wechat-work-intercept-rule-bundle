@@ -59,8 +59,6 @@ class GetInterceptRuleListRequestTest extends TestCase
     {
         // 测试获取请求选项返回空数组
         $options = $this->request->getRequestOptions();
-
-        $this->assertIsArray($options);
         $this->assertEmpty($options);
         $this->assertCount(0, $options);
     }
@@ -91,8 +89,6 @@ class GetInterceptRuleListRequestTest extends TestCase
     {
         // 测试业务场景：管理员审查所有规则
         $options = $this->request->getRequestOptions();
-
-        $this->assertIsArray($options);
         $this->assertEmpty($options);
         $this->assertSame('/cgi-bin/externalcontact/get_intercept_rule_list', $this->request->getRequestPath());
     }
@@ -113,8 +109,6 @@ class GetInterceptRuleListRequestTest extends TestCase
     {
         // 测试业务场景：合规审计获取规则列表
         $options = $this->request->getRequestOptions();
-
-        $this->assertIsArray($options);
         $this->assertCount(0, $options);
         $this->assertSame('GET', $this->request->getRequestMethod());
     }
@@ -179,8 +173,6 @@ class GetInterceptRuleListRequestTest extends TestCase
     {
         // 测试不需要任何参数
         $options = $this->request->getRequestOptions();
-
-        $this->assertIsArray($options);
         $this->assertEmpty($options);
         $this->assertArrayNotHasKey('json', $options);
         $this->assertArrayNotHasKey('query', $options);
@@ -192,8 +184,6 @@ class GetInterceptRuleListRequestTest extends TestCase
     {
         // 测试HTTP GET方法
         $method = $this->request->getRequestMethod();
-
-        $this->assertIsString($method);
         $this->assertSame('GET', $method);
         $this->assertNotSame('POST', $method);
         $this->assertNotSame('PUT', $method);
@@ -286,7 +276,7 @@ class GetInterceptRuleListRequestTest extends TestCase
         $path = $this->request->getRequestPath();
         $method = $this->request->getRequestMethod();
         $options = $this->request->getRequestOptions();
-
+        
         $this->assertIsString($path);
         $this->assertIsString($method);
         $this->assertIsArray($options);

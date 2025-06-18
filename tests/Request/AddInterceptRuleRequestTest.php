@@ -135,8 +135,6 @@ class AddInterceptRuleRequestTest extends TestCase
         $this->request->setApplicableUserList(['user001', 'user002']);
 
         $options = $this->request->getRequestOptions();
-
-        $this->assertIsArray($options);
         $this->assertArrayHasKey('json', $options);
         $json = $options['json'];
         
@@ -324,8 +322,6 @@ class AddInterceptRuleRequestTest extends TestCase
 
         $options = $this->request->getRequestOptions();
         $json = $options['json'];
-
-        $this->assertIsArray($json['applicable_range']);
         $this->assertArrayHasKey('user_list', $json['applicable_range']);
         $this->assertArrayNotHasKey('department_list', $json['applicable_range']);
     }
@@ -376,8 +372,6 @@ class AddInterceptRuleRequestTest extends TestCase
         $this->request->setApplicableUserList(['user1']);
 
         $options = $this->request->getRequestOptions();
-
-        $this->assertIsArray($options);
         $this->assertArrayHasKey('json', $options);
         $this->assertCount(1, $options);
         

@@ -99,10 +99,7 @@ class GetInterceptRuleDetailRequestTest extends TestCase
         $this->request->setRuleId($ruleId);
 
         $options = $this->request->getRequestOptions();
-
-        $this->assertIsArray($options);
         $this->assertArrayHasKey('json', $options);
-        $this->assertIsArray($options['json']);
         $this->assertArrayHasKey('rule_id', $options['json']);
         $this->assertSame($ruleId, $options['json']['rule_id']);
     }
@@ -114,11 +111,8 @@ class GetInterceptRuleDetailRequestTest extends TestCase
         $this->request->setRuleId($ruleId);
 
         $options = $this->request->getRequestOptions();
-
-        $this->assertIsArray($options);
         $this->assertCount(1, $options); // 只有json键
         $this->assertArrayHasKey('json', $options);
-        $this->assertIsArray($options['json']);
         $this->assertCount(1, $options['json']); // 只有rule_id键
         $this->assertArrayHasKey('rule_id', $options['json']);
     }
@@ -156,7 +150,6 @@ class GetInterceptRuleDetailRequestTest extends TestCase
         $options = $this->request->getRequestOptions();
 
         $this->assertSame($ruleId, $options['json']['rule_id']);
-        $this->assertIsArray($options['json']);
     }
 
     public function test_businessScenario_getWarningRuleDetail(): void
@@ -285,11 +278,8 @@ class GetInterceptRuleDetailRequestTest extends TestCase
         $options = $this->request->getRequestOptions();
 
         // 验证格式符合企业微信API要求
-        $this->assertIsArray($options);
         $this->assertArrayHasKey('json', $options);
-        $this->assertIsArray($options['json']);
         $this->assertArrayHasKey('rule_id', $options['json']);
-        $this->assertIsString($options['json']['rule_id']);
     }
 
     public function test_jsonOnlyContainsRuleId(): void

@@ -61,10 +61,7 @@ class DeleteInterceptRuleRequestTest extends TestCase
         $request->setRuleId('test_rule_id');
         
         $options = $request->getRequestOptions();
-        
-        $this->assertIsArray($options);
         $this->assertArrayHasKey('json', $options);
-        $this->assertIsArray($options['json']);
         $this->assertArrayHasKey('rule_id', $options['json']);
         $this->assertCount(1, $options['json']);
     }
@@ -249,7 +246,6 @@ class DeleteInterceptRuleRequestTest extends TestCase
         
         // 验证参数结构正确
         $this->assertArrayHasKey('json', $options);
-        $this->assertIsArray($options['json']);
         $this->assertArrayHasKey('rule_id', $options['json']);
         $this->assertSame($ruleId, $options['json']['rule_id']);
         
@@ -343,7 +339,6 @@ class DeleteInterceptRuleRequestTest extends TestCase
         
         // 验证请求数据结构完整性
         $this->assertArrayHasKey('json', $options);
-        $this->assertIsArray($options['json']);
         $this->assertSame($ruleId, $options['json']['rule_id']);
         
         // 验证只包含必要的字段

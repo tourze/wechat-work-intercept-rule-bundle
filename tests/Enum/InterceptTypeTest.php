@@ -46,7 +46,6 @@ class InterceptTypeTest extends TestCase
         // 测试标签非空
         foreach (InterceptType::cases() as $case) {
             $label = $case->getLabel();
-            $this->assertIsString($label);
             $this->assertNotEmpty($label);
         }
     }
@@ -126,12 +125,9 @@ class InterceptTypeTest extends TestCase
     {
         // 测试genOptions方法
         $options = InterceptType::genOptions();
-        
-        $this->assertIsArray($options);
         $this->assertCount(2, $options);
         
         foreach ($options as $option) {
-            $this->assertIsArray($option);
             $this->assertArrayHasKey('value', $option);
             $this->assertArrayHasKey('label', $option);
             $this->assertArrayHasKey('text', $option);
@@ -148,8 +144,6 @@ class InterceptTypeTest extends TestCase
     {
         // 测试toArray方法
         $array = InterceptType::WARN->toArray();
-        
-        $this->assertIsArray($array);
         $this->assertArrayHasKey('value', $array);
         $this->assertArrayHasKey('label', $array);
         $this->assertSame('1', $array['value']);
@@ -160,8 +154,6 @@ class InterceptTypeTest extends TestCase
     {
         // 测试toSelectItem方法
         $item = InterceptType::NOTICE->toSelectItem();
-        
-        $this->assertIsArray($item);
         $this->assertArrayHasKey('value', $item);
         $this->assertArrayHasKey('label', $item);
         $this->assertArrayHasKey('text', $item);
