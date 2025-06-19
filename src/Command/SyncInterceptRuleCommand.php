@@ -2,7 +2,7 @@
 
 namespace WechatWorkInterceptRuleBundle\Command;
 
-use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,10 +18,10 @@ use WechatWorkInterceptRuleBundle\Request\GetInterceptRuleDetailRequest;
 use WechatWorkInterceptRuleBundle\Request\GetInterceptRuleListRequest;
 
 #[AsCronTask('*/10 * * * *')]
-#[AsCommand(name: 'wechat-work:sync-intercept-rule', description: '同步敏感词规则')]
+#[AsCommand(name: self::NAME, description: '同步敏感词规则')]
 class SyncInterceptRuleCommand extends Command
 {
-    public const NAME = 'sync-intercept-rule';
+    public const NAME = 'wechat-work:sync-intercept-rule';
 
     public function __construct(
         private readonly AgentRepository $agentRepository,
@@ -60,7 +60,7 @@ class SyncInterceptRuleCommand extends Command
                     $item->setCorp($agent->getCorp());
                     $item->setAgent($agent);
                     $item->setRuleId($arr['rule_id']);
-                    $item->setCreateTime(Carbon::createFromTimestamp($arr['create_time'], date_default_timezone_get())->toDateTimeImmutable());
+                    $item->setCreateTime(CarbonImmutable::createFromTimestamp($arr['create_time'], date_default_timezone_get())->toDateTimeImmutable());
                     $item->setName($arr['rule_name']);
                     $item->setWordList($detail['word_list']);
                     $item->setInterceptType(InterceptType::tryFrom($detail['intercept_type']));
