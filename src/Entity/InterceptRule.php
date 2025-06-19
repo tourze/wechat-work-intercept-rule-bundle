@@ -8,25 +8,19 @@ use Symfony\Component\Serializer\Attribute\Groups;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use Tourze\DoctrineTrackBundle\Attribute\TrackColumn;
 use Tourze\DoctrineUserBundle\Traits\BlameableAware;
-use Tourze\EasyAdmin\Attribute\Action\Listable;
-use Tourze\EasyAdmin\Attribute\Field\SelectField;
 use Tourze\WechatWorkContracts\AgentInterface;
 use Tourze\WechatWorkContracts\CorpInterface;
-use Tourze\WechatWorkContracts\DepartmentInterface;
-use Tourze\WechatWorkContracts\UserInterface;
 use WechatWorkInterceptRuleBundle\Enum\InterceptType;
 use WechatWorkInterceptRuleBundle\Repository\InterceptRuleRepository;
-use WechatWorkJssdkBundle\Semantics\SemanticsList;
 
 /**
  * 敏感词规则
  *
  * @see https://developer.work.weixin.qq.com/document/path/96346
  */
-#[Listable]
 #[ORM\Entity(repositoryClass: InterceptRuleRepository::class)]
 #[ORM\Table(name: 'wechat_work_intercept_rule', options: ['comment' => '敏感词管理'])]
-class InterceptRule
+class InterceptRule implements \Stringable
 {
     use TimestampableAware;
     use BlameableAware;
@@ -56,8 +50,7 @@ class InterceptRule
     private array $wordList = [];
 
     #[Groups(['admin_curd'])]
-    #[SelectField(targetEntity: SemanticsList::class, mode: 'multiple')]
-    #[ORM\Column(type: Types::JSON, nullable: true, options: ['comment' => '额外的拦截语义规则'])]
+        #[ORM\Column(type: Types::JSON, nullable: true, options: ['comment' => '额外的拦截语义规则'])]
     private ?array $semanticsList = [];
 
     #[Groups(['admin_curd'])]
@@ -65,13 +58,11 @@ class InterceptRule
     private ?InterceptType $interceptType = null;
 
     #[Groups(['admin_curd'])]
-    #[SelectField(targetEntity: UserInterface::class, mode: 'multiple', idColumn: 'user_id')]
-    #[ORM\Column(type: Types::JSON, nullable: true, options: ['comment' => '可使用的userid列表'])]
+        #[ORM\Column(type: Types::JSON, nullable: true, options: ['comment' => '可使用的userid列表'])]
     private array $applicableUserList = [];
 
     #[Groups(['admin_curd'])]
-    #[SelectField(targetEntity: DepartmentInterface::class, mode: 'multiple', idColumn: 'id')]
-    #[ORM\Column(type: Types::JSON, nullable: true, options: ['comment' => '可使用的部门列表'])]
+        #[ORM\Column(type: Types::JSON, nullable: true, options: ['comment' => '可使用的部门列表'])]
     private array $applicableDepartmentList = [];
 
     #[TrackColumn]
@@ -206,5 +197,10 @@ class InterceptRule
         $this->sync = $sync;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

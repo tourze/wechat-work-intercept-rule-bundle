@@ -21,6 +21,8 @@ use WechatWorkInterceptRuleBundle\Request\GetInterceptRuleListRequest;
 #[AsCommand(name: 'wechat-work:sync-intercept-rule', description: '同步敏感词规则')]
 class SyncInterceptRuleCommand extends Command
 {
+    public const NAME = 'sync-intercept-rule';
+
     public function __construct(
         private readonly AgentRepository $agentRepository,
         private readonly InterceptRuleRepository $ruleRepository,
