@@ -40,7 +40,7 @@ class InterceptRuleListener
         $request->setRuleName($rule->getName());
         $request->setWordList($rule->getWordList());
         $request->setInterceptType((int)$rule->getInterceptType()->value);
-        $request->setSemanticsList($rule->getSemanticsList() ?: []);
+        $request->setSemanticsList($rule->getSemanticsList() ?? []);
 
         if (!empty($rule->getApplicableUserList())) {
             $request->setApplicableUserList($rule->getApplicableUserList());
@@ -82,7 +82,7 @@ class InterceptRuleListener
         $request->setRuleName($rule->getName());
         $request->setWordList($rule->getWordList());
         $request->setInterceptType((int)$rule->getInterceptType()->value);
-        $request->setSemanticsList($rule->getSemanticsList() ?: []);
+        $request->setSemanticsList($rule->getSemanticsList() ?? []);
 
         // 编辑的话，需要进行一次对比
         $detailRequest = new GetInterceptRuleDetailRequest();

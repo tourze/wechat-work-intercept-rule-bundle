@@ -17,7 +17,7 @@ use WechatWorkInterceptRuleBundle\Repository\InterceptRuleRepository;
 use WechatWorkInterceptRuleBundle\Request\GetInterceptRuleDetailRequest;
 use WechatWorkInterceptRuleBundle\Request\GetInterceptRuleListRequest;
 
-#[AsCronTask('*/10 * * * *')]
+#[AsCronTask(expression: '*/10 * * * *')]
 #[AsCommand(name: self::NAME, description: '同步敏感词规则')]
 class SyncInterceptRuleCommand extends Command
 {

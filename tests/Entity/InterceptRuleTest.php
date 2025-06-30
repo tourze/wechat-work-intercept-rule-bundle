@@ -11,7 +11,7 @@ use WechatWorkInterceptRuleBundle\Enum\InterceptType;
 
 /**
  * InterceptRule 实体测试用例
- * 
+ *
  * 测试敏感词规则实体的所有功能
  */
 class InterceptRuleTest extends TestCase

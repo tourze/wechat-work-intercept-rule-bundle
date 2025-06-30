@@ -340,6 +340,8 @@ class BaseFieldTraitTest extends TestCase
 
 /**
  * 测试用的具体类，使用BaseFieldTrait trait
+ * @internal
+ * @phpstan-ignore-next-line
  */
 class BaseFieldTraitTestClass
 {

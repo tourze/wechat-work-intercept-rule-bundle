@@ -16,8 +16,6 @@ class DeleteInterceptRuleRequestTest extends TestCase
         // 测试继承关系
         $request = new DeleteInterceptRuleRequest();
         $this->assertInstanceOf(ApiRequest::class, $request);
-        $this->assertTrue(method_exists($request, 'getAgent'));
-        $this->assertTrue(method_exists($request, 'setAgent'));
     }
 
     public function test_ruleId_setterAndGetter(): void
@@ -210,18 +208,6 @@ class DeleteInterceptRuleRequestTest extends TestCase
         $this->assertArrayNotHasKey('new_key', $options2);
     }
 
-    public function test_agentAwareTrait(): void
-    {
-        // 测试AgentAware特性
-        $request = new DeleteInterceptRuleRequest();
-        
-        // 测试trait提供的方法存在
-        $this->assertTrue(method_exists($request, 'getAgent'));
-        $this->assertTrue(method_exists($request, 'setAgent'));
-        $this->assertTrue(is_callable([$request, 'getAgent']));
-        $this->assertTrue(is_callable([$request, 'setAgent']));
-    }
-
     public function test_emptyStringValue(): void
     {
         // 测试空字符串值
@@ -354,7 +340,6 @@ class DeleteInterceptRuleRequestTest extends TestCase
         // 测试规则ID是必需的字符串
         $ruleId = 'validation_test_rule_id';
         $request->setRuleId($ruleId);
-        $this->assertIsString($request->getRuleId());
         $this->assertSame($ruleId, $request->getRuleId());
     }
 
@@ -404,10 +389,6 @@ class DeleteInterceptRuleRequestTest extends TestCase
         
         // 验证这是一个ApiRequest实例
         $this->assertInstanceOf(ApiRequest::class, $request);
-        
-        // 验证请求路径和选项方法存在
-        $this->assertTrue(method_exists($request, 'getRequestPath'));
-        $this->assertTrue(method_exists($request, 'getRequestOptions'));
     }
 
     public function test_ruleIdPersistence(): void

@@ -48,11 +48,11 @@ class GetInterceptRuleListRequestTest extends TestCase
 
     public function test_agent_methods(): void
     {
-        // 测试AgentAware trait的方法存在性
-        $this->assertTrue(method_exists($this->request, 'setAgent'));
-        $this->assertTrue(method_exists($this->request, 'getAgent'));
-        $this->assertTrue(is_callable([$this->request, 'setAgent']));
-        $this->assertTrue(is_callable([$this->request, 'getAgent']));
+        // 测试AgentAware trait的方法存在
+        // 如果方法不存在，测试会在调用时失败
+        $agent = $this->createMock(\Tourze\WechatWorkContracts\AgentInterface::class);
+        $this->request->setAgent($agent);
+        $this->assertSame($agent, $this->request->getAgent());
     }
 
     public function test_getRequestOptions_emptyArray(): void
@@ -272,14 +272,15 @@ class GetInterceptRuleListRequestTest extends TestCase
 
     public function test_methodReturnTypes(): void
     {
-        // 测试方法返回类型
+        // 测试方法返回值的内容
         $path = $this->request->getRequestPath();
         $method = $this->request->getRequestMethod();
         $options = $this->request->getRequestOptions();
         
-        $this->assertIsString($path);
-        $this->assertIsString($method);
-        $this->assertIsArray($options);
+        // 验证返回值的具体内容而不是类型
+        $this->assertSame('/cgi-bin/externalcontact/get_intercept_rule_list', $path);
+        $this->assertSame('GET', $method);
+        $this->assertSame([], $options);
     }
 
     public function test_emptyOptionsArray(): void
@@ -289,9 +290,7 @@ class GetInterceptRuleListRequestTest extends TestCase
 
         $this->assertSame([], $options);
         $this->assertCount(0, $options);
-        $this->assertEmpty($options);
-        $this->assertTrue(is_array($options));
-        $this->assertFalse(isset($options[0]));
+        // 保留有意义的检查
         $this->assertArrayNotHasKey('any_key', $options);
     }
 } 

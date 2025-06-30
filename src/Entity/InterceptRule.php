@@ -41,32 +41,32 @@ class InterceptRule implements \Stringable
     #[ORM\Column(length: 60, nullable: true, options: ['comment' => '规则ID'])]
     private ?string $ruleId = null;
 
-    #[Groups(['admin_curd'])]
+    #[Groups(groups: ['admin_curd'])]
     #[ORM\Column(type: Types::STRING, length: 20, options: ['comment' => '规则名称'])]
     private ?string $name = null;
 
-    #[Groups(['admin_curd'])]
+    #[Groups(groups: ['admin_curd'])]
     #[ORM\Column(type: Types::JSON, options: ['comment' => '敏感词列表'])]
     private array $wordList = [];
 
-    #[Groups(['admin_curd'])]
+    #[Groups(groups: ['admin_curd'])]
         #[ORM\Column(type: Types::JSON, nullable: true, options: ['comment' => '额外的拦截语义规则'])]
     private ?array $semanticsList = [];
 
-    #[Groups(['admin_curd'])]
+    #[Groups(groups: ['admin_curd'])]
     #[ORM\Column(length: 10, enumType: InterceptType::class, options: ['comment' => '拦截方式'])]
     private ?InterceptType $interceptType = null;
 
-    #[Groups(['admin_curd'])]
+    #[Groups(groups: ['admin_curd'])]
         #[ORM\Column(type: Types::JSON, nullable: true, options: ['comment' => '可使用的userid列表'])]
     private array $applicableUserList = [];
 
-    #[Groups(['admin_curd'])]
+    #[Groups(groups: ['admin_curd'])]
         #[ORM\Column(type: Types::JSON, nullable: true, options: ['comment' => '可使用的部门列表'])]
     private array $applicableDepartmentList = [];
 
     #[TrackColumn]
-    #[Groups(['admin_curd'])]
+    #[Groups(groups: ['admin_curd'])]
     #[ORM\Column(type: Types::BOOLEAN, nullable: true, options: ['comment' => '已同步', 'default' => 0])]
     private ?bool $sync = null;
 
@@ -144,7 +144,7 @@ class InterceptRule implements \Stringable
         return $this->interceptType;
     }
 
-    public function setInterceptType(InterceptType $interceptType): self
+    public function setInterceptType(?InterceptType $interceptType): self
     {
         $this->interceptType = $interceptType;
 

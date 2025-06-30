@@ -118,11 +118,10 @@ class AddInterceptRuleRequestTest extends TestCase
 
     public function test_agent_methods(): void
     {
-        // 测试AgentAware trait的方法存在性
-        $this->assertTrue(method_exists($this->request, 'setAgent'));
-        $this->assertTrue(method_exists($this->request, 'getAgent'));
-        $this->assertTrue(is_callable([$this->request, 'setAgent']));
-        $this->assertTrue(is_callable([$this->request, 'getAgent']));
+        // 测试AgentAware trait的功能
+        $agent = $this->createMock(\Tourze\WechatWorkContracts\AgentInterface::class);
+        $this->request->setAgent($agent);
+        $this->assertSame($agent, $this->request->getAgent());
     }
 
     public function test_getRequestOptions_withUserList(): void

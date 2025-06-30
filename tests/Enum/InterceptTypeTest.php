@@ -115,10 +115,18 @@ class InterceptTypeTest extends TestCase
 
     public function test_enumUsesExpectedTraits(): void
     {
-        // 测试Trait方法存在性
-        $this->assertTrue(method_exists(InterceptType::class, 'toArray'));
-        $this->assertTrue(method_exists(InterceptType::class, 'genOptions'));
-        $this->assertTrue(method_exists(InterceptType::class, 'toSelectItem'));
+        // 测试Trait方法的功能，而不是存在性
+        // 如果方法不存在，测试会在调用时失败
+        // 这些方法存在并返回数组
+        $array = InterceptType::WARN->toArray();
+        $this->assertCount(2, $array); // 应该有 value 和 label
+        
+        $options = InterceptType::genOptions();
+        $this->assertCount(2, $options); // 有两个枚举值
+        
+        $item = InterceptType::WARN->toSelectItem();
+        $this->assertArrayHasKey('value', $item);
+        $this->assertArrayHasKey('label', $item);
     }
 
     public function test_genOptions_returnArray(): void
@@ -202,10 +210,9 @@ class InterceptTypeTest extends TestCase
         $warn2 = InterceptType::WARN;
         $notice = InterceptType::NOTICE;
         
+        // PHP 8 枚举是单例的，相同的枚举值总是相同的实例
         $this->assertSame($warn1, $warn2);
         $this->assertNotSame($warn1, $notice);
-        $this->assertTrue($warn1 === $warn2);
-        $this->assertFalse($warn1 === $notice);
     }
 
     public function test_enumInArrayCheck(): void
@@ -219,18 +226,20 @@ class InterceptTypeTest extends TestCase
 
     public function test_enumSwitchStatement(): void
     {
-        // 测试枚举在switch语句中的使用
-        $result1 = match(InterceptType::WARN) {
-            InterceptType::WARN => 'intercept',
-            InterceptType::NOTICE => 'notice'
-        };
+        // 测试枚举在match表达式中的使用
+        $types = InterceptType::cases();
         
-        $result2 = match(InterceptType::NOTICE) {
-            InterceptType::WARN => 'intercept',
-            InterceptType::NOTICE => 'notice'
-        };
-        
-        $this->assertSame('intercept', $result1);
-        $this->assertSame('notice', $result2);
+        foreach ($types as $type) {
+            $result = match($type) {
+                InterceptType::WARN => 'intercept',
+                InterceptType::NOTICE => 'notice'
+            };
+            
+            if ($type === InterceptType::WARN) {
+                $this->assertSame('intercept', $result);
+            } else {
+                $this->assertSame('notice', $result);
+            }
+        }
     }
 } 

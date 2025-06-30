@@ -4,6 +4,7 @@ namespace WechatWorkInterceptRuleBundle\Request;
 
 use HttpClientBundle\Request\ApiRequest;
 use WechatWorkBundle\Request\AgentAware;
+use WechatWorkInterceptRuleBundle\Exception\InvalidInterceptRuleException;
 
 /**
  * 新建敏感词规则
@@ -41,7 +42,7 @@ class AddInterceptRuleRequest extends ApiRequest
         ];
 
         if (empty($this->getApplicableUserList()) && empty($this->getApplicableDepartmentList())) {
-            throw new \InvalidArgumentException('userid与department不能同时为不填');
+            throw new InvalidInterceptRuleException('userid与department不能同时为不填');
         }
         if (!empty($this->getApplicableUserList())) {
             $json['applicable_range']['user_list'] = $this->getApplicableUserList();

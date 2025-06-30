@@ -85,11 +85,34 @@ class GetInterceptRuleDetailRequestTest extends TestCase
 
     public function test_agent_methods(): void
     {
-        // 测试AgentAware trait的方法存在性
-        $this->assertTrue(method_exists($this->request, 'setAgent'));
-        $this->assertTrue(method_exists($this->request, 'getAgent'));
-        $this->assertTrue(is_callable([$this->request, 'setAgent']));
-        $this->assertTrue(is_callable([$this->request, 'getAgent']));
+        // 测试AgentAware trait的方法
+        // 初始时agent应该为null
+        $this->assertNull($this->request->getAgent());
+        
+        // 创建mock Agent
+        $mockAgent = $this->createMock(\Tourze\WechatWorkContracts\AgentInterface::class);
+        $mockAgent->expects($this->any())
+            ->method('getAgentId')
+            ->willReturn('agent_123');
+        $mockAgent->expects($this->any())
+            ->method('getWelcomeText')
+            ->willReturn('Welcome!');
+        
+        // 设置agent
+        $this->request->setAgent($mockAgent);
+        
+        // 验证getAgent返回相同的对象
+        $this->assertSame($mockAgent, $this->request->getAgent());
+        $this->assertNotNull($this->request->getAgent());
+        $this->assertInstanceOf(\Tourze\WechatWorkContracts\AgentInterface::class, $this->request->getAgent());
+        
+        // 验证可以获取agent的属性
+        $this->assertSame('agent_123', $this->request->getAgent()->getAgentId());
+        $this->assertSame('Welcome!', $this->request->getAgent()->getWelcomeText());
+        
+        // 测试设置为null
+        $this->request->setAgent(null);
+        $this->assertNull($this->request->getAgent());
     }
 
     public function test_getRequestOptions_withRuleId(): void
