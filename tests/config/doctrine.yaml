@@ -1,0 +1,14 @@
+doctrine:
+    orm:
+        mappings:
+            WechatWorkInterceptRuleBundle:
+                type: attribute
+                dir: '%kernel.project_dir%/src/Entity'
+                prefix: 'WechatWorkInterceptRuleBundle\Entity'
+                alias: WechatWorkInterceptRuleBundle
+            WechatWorkInterceptRuleBundleTests:
+                type: attribute
+                dir: '%kernel.project_dir%/tests/Entity'
+                prefix: 'WechatWorkInterceptRuleBundle\Tests\Entity'
+                alias: WechatWorkInterceptRuleBundleTests
+                is_bundle: false

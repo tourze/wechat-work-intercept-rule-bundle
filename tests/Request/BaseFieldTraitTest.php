@@ -1,24 +1,32 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WechatWorkInterceptRuleBundle\Tests\Request;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WechatWorkInterceptRuleBundle\Request\BaseFieldTrait;
 
 /**
  * InterceptRule BaseFieldTrait 测试
  * 创建一个测试用的具体类来测试trait功能
+ *
+ * @internal
  */
-class BaseFieldTraitTest extends TestCase
+#[CoversClass(BaseFieldTrait::class)]
+final class BaseFieldTraitTest extends TestCase
 {
     private BaseFieldTraitTestClass $instance;
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->instance = new BaseFieldTraitTestClass();
     }
 
-    public function test_ruleName_setterAndGetter(): void
+    public function testRuleNameSetterAndGetter(): void
     {
         // 测试规则名称设置和获取
         $ruleName = '敏感词拦截规则';
@@ -26,7 +34,7 @@ class BaseFieldTraitTest extends TestCase
         $this->assertSame($ruleName, $this->instance->getRuleName());
     }
 
-    public function test_ruleName_differentFormats(): void
+    public function testRuleNameDifferentFormats(): void
     {
         // 测试不同格式的规则名称
         $names = [
@@ -37,7 +45,7 @@ class BaseFieldTraitTest extends TestCase
             '很长的规则名称测试长度限制UTF8',
             '1234567890',
             'A',
-            '单'
+            '单',
         ];
 
         foreach ($names as $name) {
@@ -46,7 +54,7 @@ class BaseFieldTraitTest extends TestCase
         }
     }
 
-    public function test_ruleName_maxLength(): void
+    public function testRuleNameMaxLength(): void
     {
         // 测试规则名称最大长度（20个UTF8字符）
         $maxLengthName = str_repeat('规', 20); // 20个字符
@@ -55,7 +63,7 @@ class BaseFieldTraitTest extends TestCase
         $this->assertSame(20, mb_strlen($this->instance->getRuleName()));
     }
 
-    public function test_wordList_setterAndGetter(): void
+    public function testWordListSetterAndGetter(): void
     {
         // 测试敏感词列表设置和获取
         $wordList = ['违禁词1', '违禁词2', '敏感内容'];
@@ -63,7 +71,7 @@ class BaseFieldTraitTest extends TestCase
         $this->assertSame($wordList, $this->instance->getWordList());
     }
 
-    public function test_wordList_emptyArray(): void
+    public function testWordListEmptyArray(): void
     {
         // 测试空敏感词列表
         $emptyList = [];
@@ -72,7 +80,7 @@ class BaseFieldTraitTest extends TestCase
         $this->assertCount(0, $this->instance->getWordList());
     }
 
-    public function test_wordList_singleWord(): void
+    public function testWordListSingleWord(): void
     {
         // 测试单个敏感词
         $singleWord = ['违禁'];
@@ -81,7 +89,7 @@ class BaseFieldTraitTest extends TestCase
         $this->assertCount(1, $this->instance->getWordList());
     }
 
-    public function test_wordList_multipleWords(): void
+    public function testWordListMultipleWords(): void
     {
         // 测试多个敏感词
         $multipleWords = [
@@ -90,38 +98,38 @@ class BaseFieldTraitTest extends TestCase
             'prohibited',
             '特殊字符@#$',
             '数字123',
-            '很长的敏感词测试UTF8字符长度限制'
+            '很长的敏感词测试UTF8字符长度限制',
         ];
         $this->instance->setWordList($multipleWords);
         $this->assertSame($multipleWords, $this->instance->getWordList());
         $this->assertCount(6, $this->instance->getWordList());
     }
 
-    public function test_wordList_maxSize(): void
+    public function testWordListMaxSize(): void
     {
         // 测试敏感词列表最大大小（300个）
         $largeWordList = [];
-        for ($i = 1; $i <= 300; $i++) {
+        for ($i = 1; $i <= 300; ++$i) {
             $largeWordList[] = "敏感词{$i}";
         }
-        
+
         $this->instance->setWordList($largeWordList);
         $this->assertSame($largeWordList, $this->instance->getWordList());
         $this->assertCount(300, $this->instance->getWordList());
     }
 
-    public function test_wordList_maxWordLength(): void
+    public function testWordListMaxWordLength(): void
     {
         // 测试敏感词最大长度（32个UTF8字符）
         $maxLengthWord = str_repeat('敏', 32); // 32个字符
         $wordList = [$maxLengthWord];
-        
+
         $this->instance->setWordList($wordList);
         $this->assertSame($wordList, $this->instance->getWordList());
         $this->assertSame(32, mb_strlen($this->instance->getWordList()[0]));
     }
 
-    public function test_semanticsList_setterAndGetter(): void
+    public function testSemanticsListSetterAndGetter(): void
     {
         // 测试语义规则列表设置和获取
         $semanticsList = [1, 2, 3]; // 手机号、邮箱、红包
@@ -129,7 +137,7 @@ class BaseFieldTraitTest extends TestCase
         $this->assertSame($semanticsList, $this->instance->getSemanticsList());
     }
 
-    public function test_semanticsList_emptyArray(): void
+    public function testSemanticsListEmptyArray(): void
     {
         // 测试空语义规则列表
         $emptyList = [];
@@ -138,7 +146,7 @@ class BaseFieldTraitTest extends TestCase
         $this->assertCount(0, $this->instance->getSemanticsList());
     }
 
-    public function test_semanticsList_phoneOnly(): void
+    public function testSemanticsListPhoneOnly(): void
     {
         // 测试只拦截手机号
         $phoneOnly = [1]; // 手机号
@@ -147,7 +155,7 @@ class BaseFieldTraitTest extends TestCase
         $this->assertContains(1, $this->instance->getSemanticsList());
     }
 
-    public function test_semanticsList_emailOnly(): void
+    public function testSemanticsListEmailOnly(): void
     {
         // 测试只拦截邮箱
         $emailOnly = [2]; // 邮箱
@@ -156,7 +164,7 @@ class BaseFieldTraitTest extends TestCase
         $this->assertContains(2, $this->instance->getSemanticsList());
     }
 
-    public function test_semanticsList_redPacketOnly(): void
+    public function testSemanticsListRedPacketOnly(): void
     {
         // 测试只拦截红包
         $redPacketOnly = [3]; // 红包
@@ -165,7 +173,7 @@ class BaseFieldTraitTest extends TestCase
         $this->assertContains(3, $this->instance->getSemanticsList());
     }
 
-    public function test_semanticsList_allTypes(): void
+    public function testSemanticsListAllTypes(): void
     {
         // 测试拦截所有类型
         $allTypes = [1, 2, 3]; // 手机号、邮箱、红包
@@ -177,7 +185,7 @@ class BaseFieldTraitTest extends TestCase
         $this->assertContains(3, $this->instance->getSemanticsList());
     }
 
-    public function test_interceptType_setterAndGetter(): void
+    public function testInterceptTypeSetterAndGetter(): void
     {
         // 测试拦截方式设置和获取
         $this->instance->setInterceptType(1);
@@ -187,7 +195,7 @@ class BaseFieldTraitTest extends TestCase
         $this->assertSame(2, $this->instance->getInterceptType());
     }
 
-    public function test_interceptType_warningAndBlock(): void
+    public function testInterceptTypeWarningAndBlock(): void
     {
         // 测试警告并拦截发送模式
         $warningAndBlock = 1;
@@ -195,7 +203,7 @@ class BaseFieldTraitTest extends TestCase
         $this->assertSame($warningAndBlock, $this->instance->getInterceptType());
     }
 
-    public function test_interceptType_warningOnly(): void
+    public function testInterceptTypeWarningOnly(): void
     {
         // 测试仅发警告模式
         $warningOnly = 2;
@@ -203,7 +211,7 @@ class BaseFieldTraitTest extends TestCase
         $this->assertSame($warningOnly, $this->instance->getInterceptType());
     }
 
-    public function test_businessScenario_strictInterceptRule(): void
+    public function testBusinessScenarioStrictInterceptRule(): void
     {
         // 测试业务场景：严格拦截规则
         $this->instance->setRuleName('严格拦截规则');
@@ -217,7 +225,7 @@ class BaseFieldTraitTest extends TestCase
         $this->assertSame(1, $this->instance->getInterceptType());
     }
 
-    public function test_businessScenario_warningOnlyRule(): void
+    public function testBusinessScenarioWarningOnlyRule(): void
     {
         // 测试业务场景：仅警告规则
         $this->instance->setRuleName('温和提醒规则');
@@ -231,7 +239,7 @@ class BaseFieldTraitTest extends TestCase
         $this->assertSame(2, $this->instance->getInterceptType());
     }
 
-    public function test_businessScenario_phoneNumberRule(): void
+    public function testBusinessScenarioPhoneNumberRule(): void
     {
         // 测试业务场景：手机号专项拦截
         $this->instance->setRuleName('手机号拦截规则');
@@ -245,7 +253,7 @@ class BaseFieldTraitTest extends TestCase
         $this->assertSame(1, $this->instance->getInterceptType());
     }
 
-    public function test_businessScenario_emailAndRedPacketRule(): void
+    public function testBusinessScenarioEmailAndRedPacketRule(): void
     {
         // 测试业务场景：邮箱和红包拦截
         $this->instance->setRuleName('邮箱红包拦截');
@@ -259,7 +267,7 @@ class BaseFieldTraitTest extends TestCase
         $this->assertSame(1, $this->instance->getInterceptType());
     }
 
-    public function test_multipleSetOperations(): void
+    public function testMultipleSetOperations(): void
     {
         // 测试多次设置操作
         $this->instance->setRuleName('第一个规则');
@@ -280,7 +288,7 @@ class BaseFieldTraitTest extends TestCase
         $this->assertSame(2, $this->instance->getInterceptType());
     }
 
-    public function test_specialCharactersInWords(): void
+    public function testSpecialCharactersInWords(): void
     {
         // 测试敏感词中的特殊字符
         $specialWords = [
@@ -290,7 +298,7 @@ class BaseFieldTraitTest extends TestCase
             'URL网址http://example.com',
             '空格 测试',
             'emoji😀🎉🔥',
-            '标点符号！？。，；：'
+            '标点符号！？。，；：',
         ];
 
         $this->instance->setWordList($specialWords);
@@ -298,7 +306,7 @@ class BaseFieldTraitTest extends TestCase
         $this->assertCount(7, $this->instance->getWordList());
     }
 
-    public function test_edgeCases_duplicateSemantics(): void
+    public function testEdgeCasesDuplicateSemantics(): void
     {
         // 测试边界情况：重复的语义规则
         $duplicateSemantics = [1, 1, 2, 2, 3, 3];
@@ -307,7 +315,7 @@ class BaseFieldTraitTest extends TestCase
         $this->assertCount(6, $this->instance->getSemanticsList());
     }
 
-    public function test_edgeCases_duplicateWords(): void
+    public function testEdgeCasesDuplicateWords(): void
     {
         // 测试边界情况：重复的敏感词
         $duplicateWords = ['重复词', '重复词', '另一个词', '另一个词'];
@@ -316,7 +324,7 @@ class BaseFieldTraitTest extends TestCase
         $this->assertCount(4, $this->instance->getWordList());
     }
 
-    public function test_ruleNameWithSpaces(): void
+    public function testRuleNameWithSpaces(): void
     {
         // 测试包含空格的规则名称
         $nameWithSpaces = '带 空格 的 规则 名称';
@@ -324,38 +332,16 @@ class BaseFieldTraitTest extends TestCase
         $this->assertSame($nameWithSpaces, $this->instance->getRuleName());
     }
 
-    public function test_immutableGettersReturnSameReference(): void
+    public function testImmutableGettersReturnSameReference(): void
     {
         // 测试数组getter返回的是相同引用
         $wordList = ['测试词1', '测试词2'];
         $semanticsList = [1, 2];
-        
+
         $this->instance->setWordList($wordList);
         $this->instance->setSemanticsList($semanticsList);
-        
+
         $this->assertSame($wordList, $this->instance->getWordList());
         $this->assertSame($semanticsList, $this->instance->getSemanticsList());
     }
 }
-
-/**
- * 测试用的具体类，使用BaseFieldTrait trait
- * @internal
- * @phpstan-ignore-next-line
- */
-class BaseFieldTraitTestClass
-{
-    use BaseFieldTrait;
-    
-    private ?string $agent = null;
-    
-    public function getAgent(): ?string
-    {
-        return $this->agent;
-    }
-    
-    public function setAgent(?string $agent): void
-    {
-        $this->agent = $agent;
-    }
-} 

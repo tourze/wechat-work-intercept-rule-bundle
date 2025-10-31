@@ -6,7 +6,12 @@ services:
 
   WechatWorkInterceptRuleBundle\Command\:
     resource: '../../Command/'
+  WechatWorkInterceptRuleBundle\Controller\:
+    resource: '../../Controller/'
+    tags: ['controller.service_arguments']
   WechatWorkInterceptRuleBundle\EventSubscriber\:
     resource: '../../EventSubscriber/'
   WechatWorkInterceptRuleBundle\Repository\:
     resource: '../../Repository/'
+  WechatWorkInterceptRuleBundle\Service\:
+    resource: '../../Service/'

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WechatWorkInterceptRuleBundle\Request;
 
 trait BaseFieldTrait
@@ -10,12 +12,12 @@ trait BaseFieldTrait
     private string $ruleName;
 
     /**
-     * @var array 敏感词列表，敏感词长度1~32个utf8字符，列表大小不能超过300个
+     * @var array<string> 敏感词列表，敏感词长度1~32个utf8字符，列表大小不能超过300个
      */
     private array $wordList;
 
     /**
-     * @var array 额外的拦截语义规则，1：手机号、2：邮箱地:、3：红包
+     * @var array<int> 额外的拦截语义规则，1：手机号、2：邮箱地:、3：红包
      */
     private array $semanticsList;
 
@@ -34,21 +36,33 @@ trait BaseFieldTrait
         $this->ruleName = $ruleName;
     }
 
+    /**
+     * @return array<string>
+     */
     public function getWordList(): array
     {
         return $this->wordList;
     }
 
+    /**
+     * @param array<string> $wordList
+     */
     public function setWordList(array $wordList): void
     {
         $this->wordList = $wordList;
     }
 
+    /**
+     * @return array<int>
+     */
     public function getSemanticsList(): array
     {
         return $this->semanticsList;
     }
 
+    /**
+     * @param array<int> $semanticsList
+     */
     public function setSemanticsList(array $semanticsList): void
     {
         $this->semanticsList = $semanticsList;

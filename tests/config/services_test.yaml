@@ -1,0 +1,24 @@
+services:
+    _defaults:
+        public: true
+        autowire: true
+        autoconfigure: true
+
+    # 测试环境的 DataFixtures 相关服务配置
+    WechatWorkInterceptRuleBundle\Tests\Entity\TestAgent: ~
+    WechatWorkInterceptRuleBundle\Tests\Entity\TestCorp: ~
+    
+    # 测试环境的仓库配置
+    WechatWorkInterceptRuleBundle\Tests\Entity\TestAgentRepository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [WechatWorkInterceptRuleBundle\Tests\Entity\TestAgent]
+        
+    WechatWorkInterceptRuleBundle\Tests\Entity\TestCorpRepository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [WechatWorkInterceptRuleBundle\Tests\Entity\TestCorp]
+    
+    # 测试环境的 Stub 服务
+    WechatWorkBundle\Repository\AgentRepository:
+        class: WechatWorkInterceptRuleBundle\Tests\Stub\StubAgentRepository

@@ -1,99 +1,114 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WechatWorkInterceptRuleBundle\Tests\Request;
 
 use HttpClientBundle\Request\ApiRequest;
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use HttpClientBundle\Tests\Request\RequestTestCase;
+use Tourze\WechatWorkContracts\AgentInterface;
 use WechatWorkBundle\Request\AgentAware;
 use WechatWorkInterceptRuleBundle\Request\GetInterceptRuleListRequest;
 
 /**
  * GetInterceptRuleListRequest 测试
+ *
+ * @internal
  */
-class GetInterceptRuleListRequestTest extends TestCase
+#[CoversClass(GetInterceptRuleListRequest::class)]
+final class GetInterceptRuleListRequestTest extends RequestTestCase
 {
     private GetInterceptRuleListRequest $request;
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->request = new GetInterceptRuleListRequest();
     }
 
-    public function test_inheritance(): void
+    public function testInheritance(): void
     {
         // 测试继承关系
         $this->assertInstanceOf(ApiRequest::class, $this->request);
     }
 
-    public function test_traits(): void
+    public function testTraits(): void
     {
         // 测试使用的trait
         $traits = class_uses($this->request);
         $this->assertContains(AgentAware::class, $traits);
     }
 
-    public function test_getRequestPath(): void
+    public function testGetRequestPath(): void
     {
         // 测试请求路径
         $expectedPath = '/cgi-bin/externalcontact/get_intercept_rule_list';
         $this->assertSame($expectedPath, $this->request->getRequestPath());
     }
 
-    public function test_getRequestMethod(): void
+    public function testGetRequestMethod(): void
     {
         // 测试请求方法
         $expectedMethod = 'GET';
         $this->assertSame($expectedMethod, $this->request->getRequestMethod());
     }
 
-    public function test_agent_methods(): void
+    public function testAgentMethods(): void
     {
         // 测试AgentAware trait的方法存在
         // 如果方法不存在，测试会在调用时失败
-        $agent = $this->createMock(\Tourze\WechatWorkContracts\AgentInterface::class);
+        $agent = $this->createMock(AgentInterface::class);
         $this->request->setAgent($agent);
         $this->assertSame($agent, $this->request->getAgent());
     }
 
-    public function test_getRequestOptions_emptyArray(): void
+    public function testGetRequestOptionsEmptyArray(): void
     {
         // 测试获取请求选项返回空数组
         $options = $this->request->getRequestOptions();
+        $this->assertNotNull($options);
         $this->assertEmpty($options);
         $this->assertCount(0, $options);
     }
 
-    public function test_requestOptions_consistency(): void
+    public function testRequestOptionsConsistency(): void
     {
         // 测试请求选项的一致性
         $options1 = $this->request->getRequestOptions();
         $options2 = $this->request->getRequestOptions();
 
+        $this->assertNotNull($options1);
+        $this->assertNotNull($options2);
         $this->assertEquals($options1, $options2);
         $this->assertSame($options1, $options2);
     }
 
-    public function test_businessScenario_getAllRules(): void
+    public function testBusinessScenarioGetAllRules(): void
     {
         // 测试业务场景：获取所有敏感词规则列表
         $options = $this->request->getRequestOptions();
         $path = $this->request->getRequestPath();
         $method = $this->request->getRequestMethod();
 
+        $this->assertNotNull($options);
         $this->assertEmpty($options);
         $this->assertSame('/cgi-bin/externalcontact/get_intercept_rule_list', $path);
         $this->assertSame('GET', $method);
     }
 
-    public function test_businessScenario_adminReview(): void
+    public function testBusinessScenarioAdminReview(): void
     {
         // 测试业务场景：管理员审查所有规则
         $options = $this->request->getRequestOptions();
+        $this->assertNotNull($options);
         $this->assertEmpty($options);
         $this->assertSame('/cgi-bin/externalcontact/get_intercept_rule_list', $this->request->getRequestPath());
     }
 
-    public function test_businessScenario_ruleManagement(): void
+    public function testBusinessScenarioRuleManagement(): void
     {
         // 测试业务场景：规则管理界面获取列表
         $path = $this->request->getRequestPath();
@@ -105,15 +120,16 @@ class GetInterceptRuleListRequestTest extends TestCase
         $this->assertEmpty($options);
     }
 
-    public function test_businessScenario_complianceAudit(): void
+    public function testBusinessScenarioComplianceAudit(): void
     {
         // 测试业务场景：合规审计获取规则列表
         $options = $this->request->getRequestOptions();
+        $this->assertNotNull($options);
         $this->assertCount(0, $options);
         $this->assertSame('GET', $this->request->getRequestMethod());
     }
 
-    public function test_businessScenario_systemMonitoring(): void
+    public function testBusinessScenarioSystemMonitoring(): void
     {
         // 测试业务场景：系统监控获取规则状态
         $path = $this->request->getRequestPath();
@@ -123,7 +139,7 @@ class GetInterceptRuleListRequestTest extends TestCase
         $this->assertEmpty($options);
     }
 
-    public function test_businessScenario_reportGeneration(): void
+    public function testBusinessScenarioReportGeneration(): void
     {
         // 测试业务场景：生成规则报告
         $options = $this->request->getRequestOptions();
@@ -133,7 +149,7 @@ class GetInterceptRuleListRequestTest extends TestCase
         $this->assertSame('GET', $method);
     }
 
-    public function test_requestPath_immutable(): void
+    public function testRequestPathImmutable(): void
     {
         // 测试请求路径不可变
         $path1 = $this->request->getRequestPath();
@@ -144,7 +160,7 @@ class GetInterceptRuleListRequestTest extends TestCase
         $this->assertSame('/cgi-bin/externalcontact/get_intercept_rule_list', $path1);
     }
 
-    public function test_requestMethod_immutable(): void
+    public function testRequestMethodImmutable(): void
     {
         // 测试请求方法不可变
         $method1 = $this->request->getRequestMethod();
@@ -154,13 +170,16 @@ class GetInterceptRuleListRequestTest extends TestCase
         $this->assertSame('GET', $method1);
     }
 
-    public function test_requestOptions_alwaysEmpty(): void
+    public function testRequestOptionsAlwaysEmpty(): void
     {
         // 测试请求选项始终为空
         $options1 = $this->request->getRequestOptions();
         $options2 = $this->request->getRequestOptions();
         $options3 = $this->request->getRequestOptions();
 
+        $this->assertNotNull($options1);
+        $this->assertNotNull($options2);
+        $this->assertNotNull($options3);
         $this->assertEmpty($options1);
         $this->assertEmpty($options2);
         $this->assertEmpty($options3);
@@ -169,10 +188,11 @@ class GetInterceptRuleListRequestTest extends TestCase
         $this->assertEquals([], $options3);
     }
 
-    public function test_noParametersRequired(): void
+    public function testNoParametersRequired(): void
     {
         // 测试不需要任何参数
         $options = $this->request->getRequestOptions();
+        $this->assertNotNull($options);
         $this->assertEmpty($options);
         $this->assertArrayNotHasKey('json', $options);
         $this->assertArrayNotHasKey('query', $options);
@@ -180,17 +200,14 @@ class GetInterceptRuleListRequestTest extends TestCase
         $this->assertArrayNotHasKey('body', $options);
     }
 
-    public function test_httpGetMethod(): void
+    public function testHttpGetMethod(): void
     {
         // 测试HTTP GET方法
         $method = $this->request->getRequestMethod();
         $this->assertSame('GET', $method);
-        $this->assertNotSame('POST', $method);
-        $this->assertNotSame('PUT', $method);
-        $this->assertNotSame('DELETE', $method);
     }
 
-    public function test_apiEndpointStructure(): void
+    public function testApiEndpointStructure(): void
     {
         // 测试API端点结构
         $path = $this->request->getRequestPath();
@@ -201,7 +218,7 @@ class GetInterceptRuleListRequestTest extends TestCase
         $this->assertStringEndsWith('get_intercept_rule_list', $path);
     }
 
-    public function test_idempotency(): void
+    public function testIdempotency(): void
     {
         // 测试幂等性
         $path1 = $this->request->getRequestPath();
@@ -212,24 +229,27 @@ class GetInterceptRuleListRequestTest extends TestCase
         $method2 = $this->request->getRequestMethod();
         $options2 = $this->request->getRequestOptions();
 
+        $this->assertNotNull($options1);
+        $this->assertNotNull($options2);
         $this->assertSame($path1, $path2);
         $this->assertSame($method1, $method2);
         $this->assertEquals($options1, $options2);
     }
 
-    public function test_getMethodWithoutBody(): void
+    public function testGetMethodWithoutBody(): void
     {
         // 测试GET方法不包含请求体
         $options = $this->request->getRequestOptions();
         $method = $this->request->getRequestMethod();
 
+        $this->assertNotNull($options);
         $this->assertSame('GET', $method);
         $this->assertEmpty($options);
         $this->assertArrayNotHasKey('json', $options);
         $this->assertArrayNotHasKey('body', $options);
     }
 
-    public function test_staticBehavior(): void
+    public function testStaticBehavior(): void
     {
         // 测试静态行为（所有实例都相同）
         $request1 = new GetInterceptRuleListRequest();
@@ -237,17 +257,21 @@ class GetInterceptRuleListRequestTest extends TestCase
 
         $this->assertSame($request1->getRequestPath(), $request2->getRequestPath());
         $this->assertSame($request1->getRequestMethod(), $request2->getRequestMethod());
-        $this->assertEquals($request1->getRequestOptions(), $request2->getRequestOptions());
+        $options1 = $request1->getRequestOptions();
+        $options2 = $request2->getRequestOptions();
+        $this->assertNotNull($options1);
+        $this->assertNotNull($options2);
+        $this->assertEquals($options1, $options2);
     }
 
-    public function test_inheritanceChain(): void
+    public function testInheritanceChain(): void
     {
         // 测试继承链
-        $this->assertInstanceOf(\HttpClientBundle\Request\ApiRequest::class, $this->request);
-        $this->assertInstanceOf(\WechatWorkInterceptRuleBundle\Request\GetInterceptRuleListRequest::class, $this->request);
+        $this->assertInstanceOf(ApiRequest::class, $this->request);
+        $this->assertInstanceOf(GetInterceptRuleListRequest::class, $this->request);
     }
 
-    public function test_traitUsage(): void
+    public function testTraitUsage(): void
     {
         // 测试trait使用
         $uses = class_uses($this->request);
@@ -255,42 +279,47 @@ class GetInterceptRuleListRequestTest extends TestCase
         $this->assertCount(1, $uses); // 只使用一个trait
     }
 
-    public function test_noStateChanges(): void
+    public function testNoStateChanges(): void
     {
         // 测试无状态变化
         $initialPath = $this->request->getRequestPath();
         $initialMethod = $this->request->getRequestMethod();
         $initialOptions = $this->request->getRequestOptions();
+        $this->assertNotNull($initialOptions);
 
         // 多次调用
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 10; ++$i) {
             $this->assertSame($initialPath, $this->request->getRequestPath());
             $this->assertSame($initialMethod, $this->request->getRequestMethod());
-            $this->assertEquals($initialOptions, $this->request->getRequestOptions());
+            $currentOptions = $this->request->getRequestOptions();
+            $this->assertNotNull($currentOptions);
+            $this->assertEquals($initialOptions, $currentOptions);
         }
     }
 
-    public function test_methodReturnTypes(): void
+    public function testMethodReturnTypes(): void
     {
         // 测试方法返回值的内容
         $path = $this->request->getRequestPath();
         $method = $this->request->getRequestMethod();
         $options = $this->request->getRequestOptions();
-        
+
         // 验证返回值的具体内容而不是类型
+        $this->assertNotNull($options);
         $this->assertSame('/cgi-bin/externalcontact/get_intercept_rule_list', $path);
         $this->assertSame('GET', $method);
         $this->assertSame([], $options);
     }
 
-    public function test_emptyOptionsArray(): void
+    public function testEmptyOptionsArray(): void
     {
         // 测试空选项数组的特性
         $options = $this->request->getRequestOptions();
 
+        $this->assertNotNull($options);
         $this->assertSame([], $options);
         $this->assertCount(0, $options);
         // 保留有意义的检查
         $this->assertArrayNotHasKey('any_key', $options);
     }
-} 
+}

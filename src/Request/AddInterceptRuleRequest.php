@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WechatWorkInterceptRuleBundle\Request;
 
 use HttpClientBundle\Request\ApiRequest;
@@ -17,12 +19,12 @@ class AddInterceptRuleRequest extends ApiRequest
     use BaseFieldTrait;
 
     /**
-     * @var array 可使用的userid列表。必须为应用可见范围内的成员；最多支持传1000个节点
+     * @var array<string> 可使用的userid列表。必须为应用可见范围内的成员；最多支持传1000个节点
      */
     private array $applicableUserList = [];
 
     /**
-     * @var array 可使用的部门列表，必须为应用可见范围内的部门；最多支持传1000个节点
+     * @var array<int> 可使用的部门列表，必须为应用可见范围内的部门；最多支持传1000个节点
      */
     private array $applicableDepartmentList = [];
 
@@ -31,6 +33,9 @@ class AddInterceptRuleRequest extends ApiRequest
         return '/cgi-bin/externalcontact/add_intercept_rule';
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function getRequestOptions(): ?array
     {
         $json = [
@@ -41,13 +46,13 @@ class AddInterceptRuleRequest extends ApiRequest
             'applicable_range' => [],
         ];
 
-        if (empty($this->getApplicableUserList()) && empty($this->getApplicableDepartmentList())) {
+        if ([] === $this->getApplicableUserList() && [] === $this->getApplicableDepartmentList()) {
             throw new InvalidInterceptRuleException('userid与department不能同时为不填');
         }
-        if (!empty($this->getApplicableUserList())) {
+        if ([] !== $this->getApplicableUserList()) {
             $json['applicable_range']['user_list'] = $this->getApplicableUserList();
         }
-        if (!empty($this->getApplicableDepartmentList())) {
+        if ([] !== $this->getApplicableDepartmentList()) {
             $json['applicable_range']['department_list'] = $this->getApplicableDepartmentList();
         }
 
@@ -56,21 +61,33 @@ class AddInterceptRuleRequest extends ApiRequest
         ];
     }
 
+    /**
+     * @return array<string>
+     */
     public function getApplicableUserList(): array
     {
         return $this->applicableUserList;
     }
 
+    /**
+     * @param array<string> $applicableUserList
+     */
     public function setApplicableUserList(array $applicableUserList): void
     {
         $this->applicableUserList = $applicableUserList;
     }
 
+    /**
+     * @return array<int>
+     */
     public function getApplicableDepartmentList(): array
     {
         return $this->applicableDepartmentList;
     }
 
+    /**
+     * @param array<int> $applicableDepartmentList
+     */
     public function setApplicableDepartmentList(array $applicableDepartmentList): void
     {
         $this->applicableDepartmentList = $applicableDepartmentList;

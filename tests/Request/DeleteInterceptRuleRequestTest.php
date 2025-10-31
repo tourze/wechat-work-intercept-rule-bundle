@@ -1,267 +1,316 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WechatWorkInterceptRuleBundle\Tests\Request;
 
 use HttpClientBundle\Request\ApiRequest;
-use PHPUnit\Framework\TestCase;
+use HttpClientBundle\Tests\Request\RequestTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use WechatWorkInterceptRuleBundle\Request\DeleteInterceptRuleRequest;
 
 /**
  * DeleteInterceptRuleRequest 测试
+ *
+ * @internal
  */
-class DeleteInterceptRuleRequestTest extends TestCase
+#[CoversClass(DeleteInterceptRuleRequest::class)]
+final class DeleteInterceptRuleRequestTest extends RequestTestCase
 {
-    public function test_inheritance(): void
+    public function testInheritance(): void
     {
         // 测试继承关系
         $request = new DeleteInterceptRuleRequest();
         $this->assertInstanceOf(ApiRequest::class, $request);
     }
 
-    public function test_ruleId_setterAndGetter(): void
+    public function testRuleIdSetterAndGetter(): void
     {
         // 测试规则ID设置和获取
         $request = new DeleteInterceptRuleRequest();
         $ruleId = 'rule_id_12345';
-        
+
         $request->setRuleId($ruleId);
         $this->assertSame($ruleId, $request->getRuleId());
     }
 
-    public function test_requestPath(): void
+    public function testRequestPath(): void
     {
         // 测试请求路径
         $request = new DeleteInterceptRuleRequest();
         $this->assertSame('/cgi-bin/externalcontact/del_intercept_rule', $request->getRequestPath());
     }
 
-    public function test_requestOptions(): void
+    public function testRequestOptions(): void
     {
         // 测试获取请求选项
         $request = new DeleteInterceptRuleRequest();
         $ruleId = 'delete_rule_001';
-        
+
         $request->setRuleId($ruleId);
-        
+
         $expected = [
             'json' => [
                 'rule_id' => $ruleId,
             ],
         ];
-        
+
         $this->assertSame($expected, $request->getRequestOptions());
     }
 
-    public function test_requestOptionsStructure(): void
+    public function testRequestOptionsStructure(): void
     {
         // 测试请求选项结构
         $request = new DeleteInterceptRuleRequest();
         $request->setRuleId('test_rule_id');
-        
+
         $options = $request->getRequestOptions();
+        $this->assertNotNull($options);
         $this->assertArrayHasKey('json', $options);
-        $this->assertArrayHasKey('rule_id', $options['json']);
-        $this->assertCount(1, $options['json']);
+        $json = $options['json'];
+        $this->assertNotNull($json);
+        $this->assertIsArray($json);
+        $this->assertArrayHasKey('rule_id', $json);
+        $this->assertCount(1, $json);
     }
 
-    public function test_businessScenario_deleteSensitiveWordRule(): void
+    public function testBusinessScenarioDeleteSensitiveWordRule(): void
     {
         // 测试业务场景：删除敏感词规则
         $request = new DeleteInterceptRuleRequest();
         $sensitiveRuleId = 'sensitive_word_rule_001';
-        
+
         $request->setRuleId($sensitiveRuleId);
-        
+
         $this->assertSame($sensitiveRuleId, $request->getRuleId());
-        
+
         $options = $request->getRequestOptions();
-        $this->assertSame($sensitiveRuleId, $options['json']['rule_id']);
-        
+        $this->assertNotNull($options);
+        $this->assertArrayHasKey('json', $options);
+        $json = $options['json'];
+        $this->assertIsArray($json);
+        $this->assertSame($sensitiveRuleId, $json['rule_id']);
+
         // 验证API路径正确
         $this->assertSame('/cgi-bin/externalcontact/del_intercept_rule', $request->getRequestPath());
     }
 
-    public function test_businessScenario_removeContentFilter(): void
+    public function testBusinessScenarioRemoveContentFilter(): void
     {
         // 测试业务场景：移除内容过滤规则
         $request = new DeleteInterceptRuleRequest();
         $filterRuleId = 'content_filter_rule_002';
-        
+
         $request->setRuleId($filterRuleId);
-        
+
         $options = $request->getRequestOptions();
-        $this->assertSame($filterRuleId, $options['json']['rule_id']);
+        $this->assertNotNull($options);
+        $this->assertArrayHasKey('json', $options);
+        $json = $options['json'];
+        $this->assertIsArray($json);
+        $this->assertSame($filterRuleId, $json['rule_id']);
     }
 
-    public function test_businessScenario_cleanupInterceptRule(): void
+    public function testBusinessScenarioCleanupInterceptRule(): void
     {
         // 测试业务场景：清理拦截规则
         $request = new DeleteInterceptRuleRequest();
         $cleanupRuleId = 'intercept_cleanup_rule_003';
-        
+
         $request->setRuleId($cleanupRuleId);
-        
+
         $this->assertSame($cleanupRuleId, $request->getRuleId());
-        
+
         // 验证API路径符合拦截规则删除要求
         $this->assertStringContainsString('intercept_rule', $request->getRequestPath());
         $this->assertStringContainsString('del', $request->getRequestPath());
     }
 
-    public function test_ruleIdSpecialCharacters(): void
+    public function testRuleIdSpecialCharacters(): void
     {
         // 测试规则ID特殊字符
         $request = new DeleteInterceptRuleRequest();
         $specialRuleId = 'rule-id_with.special@chars_123';
-        
+
         $request->setRuleId($specialRuleId);
-        
+
         $this->assertSame($specialRuleId, $request->getRuleId());
-        
+
         $options = $request->getRequestOptions();
-        $this->assertSame($specialRuleId, $options['json']['rule_id']);
+        $this->assertNotNull($options);
+        $this->assertArrayHasKey('json', $options);
+        $json = $options['json'];
+        $this->assertIsArray($json);
+        $this->assertSame($specialRuleId, $json['rule_id']);
     }
 
-    public function test_longRuleId(): void
+    public function testLongRuleId(): void
     {
         // 测试长规则ID
         $request = new DeleteInterceptRuleRequest();
         $longRuleId = str_repeat('rule_id_part_', 10) . 'end';
-        
+
         $request->setRuleId($longRuleId);
-        
+
         $this->assertSame($longRuleId, $request->getRuleId());
     }
 
-    public function test_unicodeCharacters(): void
+    public function testUnicodeCharacters(): void
     {
         // 测试Unicode字符
         $request = new DeleteInterceptRuleRequest();
         $unicodeRuleId = '规则_ID_测试_123';
-        
+
         $request->setRuleId($unicodeRuleId);
-        
+
         $this->assertSame($unicodeRuleId, $request->getRuleId());
-        
+
         $options = $request->getRequestOptions();
-        $this->assertSame($unicodeRuleId, $options['json']['rule_id']);
+        $this->assertNotNull($options);
+        $this->assertArrayHasKey('json', $options);
+        $json = $options['json'];
+        $this->assertIsArray($json);
+        $this->assertSame($unicodeRuleId, $json['rule_id']);
     }
 
-    public function test_multipleSetOperations(): void
+    public function testMultipleSetOperations(): void
     {
         // 测试多次设置值
         $request = new DeleteInterceptRuleRequest();
-        
+
         $firstRuleId = 'first_rule_id';
         $secondRuleId = 'second_rule_id';
-        
+
         $request->setRuleId($firstRuleId);
         $this->assertSame($firstRuleId, $request->getRuleId());
-        
+
         $request->setRuleId($secondRuleId);
         $this->assertSame($secondRuleId, $request->getRuleId());
-        
+
         $options = $request->getRequestOptions();
-        $this->assertSame($secondRuleId, $options['json']['rule_id']);
+        $this->assertNotNull($options);
+        $this->assertArrayHasKey('json', $options);
+        $json = $options['json'];
+        $this->assertIsArray($json);
+        $this->assertSame($secondRuleId, $json['rule_id']);
     }
 
-    public function test_idempotentMethodCalls(): void
+    public function testIdempotentMethodCalls(): void
     {
         // 测试方法调用是幂等的
         $request = new DeleteInterceptRuleRequest();
         $ruleId = 'idempotent_rule_id';
-        
+
         $request->setRuleId($ruleId);
-        
+
         // 多次调用应该返回相同结果
         $this->assertSame($ruleId, $request->getRuleId());
         $this->assertSame($ruleId, $request->getRuleId());
-        
+
         $options1 = $request->getRequestOptions();
         $options2 = $request->getRequestOptions();
         $this->assertSame($options1, $options2);
-        
+
         $path1 = $request->getRequestPath();
         $path2 = $request->getRequestPath();
         $this->assertSame($path1, $path2);
     }
 
-    public function test_immutableRequestOptions(): void
+    public function testImmutableRequestOptions(): void
     {
         // 测试获取请求选项不会修改原始数据
         $request = new DeleteInterceptRuleRequest();
         $originalRuleId = 'original_rule_id';
-        
+
         $request->setRuleId($originalRuleId);
-        
+
         $options1 = $request->getRequestOptions();
         $options2 = $request->getRequestOptions();
-        
+
         // 修改返回的数组不应影响原始数据
+        $this->assertNotNull($options1);
+        $this->assertIsArray($options1);
+        $this->assertArrayHasKey('json', $options1);
+        $this->assertIsArray($options1['json']);
         $options1['json']['rule_id'] = 'modified_rule_id';
         $options1['json']['new_field'] = 'new_value';
         $options1['new_key'] = 'new_value';
-        
+
         $this->assertSame($originalRuleId, $request->getRuleId());
+        $this->assertNotNull($options2);
+        $this->assertIsArray($options2);
+        $this->assertArrayHasKey('json', $options2);
+        $this->assertIsArray($options2['json']);
         $this->assertSame($originalRuleId, $options2['json']['rule_id']);
         $this->assertArrayNotHasKey('new_field', $options2['json']);
         $this->assertArrayNotHasKey('new_key', $options2);
     }
 
-    public function test_emptyStringValue(): void
+    public function testEmptyStringValue(): void
     {
         // 测试空字符串值
         $request = new DeleteInterceptRuleRequest();
         $request->setRuleId('');
-        
+
         $this->assertSame('', $request->getRuleId());
-        
+
         $options = $request->getRequestOptions();
-        $this->assertSame('', $options['json']['rule_id']);
+        $this->assertNotNull($options);
+        $this->assertArrayHasKey('json', $options);
+        $json = $options['json'];
+        $this->assertIsArray($json);
+        $this->assertSame('', $json['rule_id']);
     }
 
-    public function test_requestParametersCorrectness(): void
+    public function testRequestParametersCorrectness(): void
     {
         // 测试请求参数正确性
         $request = new DeleteInterceptRuleRequest();
         $ruleId = 'param_test_rule_id';
-        
+
         $request->setRuleId($ruleId);
-        
+
         $options = $request->getRequestOptions();
-        
+        $this->assertNotNull($options);
+
         // 验证参数结构正确
         $this->assertArrayHasKey('json', $options);
-        $this->assertArrayHasKey('rule_id', $options['json']);
-        $this->assertSame($ruleId, $options['json']['rule_id']);
-        
+        $json = $options['json'];
+        $this->assertIsArray($json);
+        $this->assertArrayHasKey('rule_id', $json);
+        $this->assertSame($ruleId, $json['rule_id']);
+
         // 验证只包含必要的参数
         $this->assertCount(1, $options);
-        $this->assertCount(1, $options['json']);
+        $json = $options['json'];
+        $this->assertIsArray($json);
+        $this->assertCount(1, $json);
     }
 
-    public function test_apiEndpointCorrectness(): void
+    public function testApiEndpointCorrectness(): void
     {
         // 测试API端点正确性
         $request = new DeleteInterceptRuleRequest();
         $path = $request->getRequestPath();
-        
+
         $this->assertStringContainsString('externalcontact', $path);
         $this->assertStringContainsString('del_intercept_rule', $path);
         $this->assertStringStartsWith('/cgi-bin/', $path);
         $this->assertStringEndsWith('/del_intercept_rule', $path);
     }
 
-    public function test_jsonRequestFormat(): void
+    public function testJsonRequestFormat(): void
     {
         // 测试JSON请求格式
         $request = new DeleteInterceptRuleRequest();
         $ruleId = 'json_format_rule_id';
-        
+
         $request->setRuleId($ruleId);
-        
+
         $options = $request->getRequestOptions();
-        
+        $this->assertNotNull($options);
+
         // 验证使用json而不是query格式
         $this->assertArrayHasKey('json', $options);
         $this->assertArrayNotHasKey('query', $options);
@@ -269,98 +318,119 @@ class DeleteInterceptRuleRequestTest extends TestCase
         $this->assertArrayNotHasKey('form_params', $options);
     }
 
-    public function test_businessScenario_securityRuleManagement(): void
+    public function testBusinessScenarioSecurityRuleManagement(): void
     {
         // 测试业务场景：安全规则管理
         $request = new DeleteInterceptRuleRequest();
         $securityRuleId = 'security_rule_mgmt_001';
-        
+
         $request->setRuleId($securityRuleId);
-        
+
         $this->assertSame($securityRuleId, $request->getRuleId());
-        
+
         $options = $request->getRequestOptions();
-        $this->assertSame($securityRuleId, $options['json']['rule_id']);
-        
+        $this->assertNotNull($options);
+        $this->assertArrayHasKey('json', $options);
+        $json = $options['json'];
+        $this->assertIsArray($json);
+        $this->assertSame($securityRuleId, $json['rule_id']);
+
         // 验证API支持安全规则删除
         $this->assertStringContainsString('del_intercept_rule', $request->getRequestPath());
     }
 
-    public function test_businessScenario_complianceRuleRemoval(): void
+    public function testBusinessScenarioComplianceRuleRemoval(): void
     {
         // 测试业务场景：合规规则移除
         $request = new DeleteInterceptRuleRequest();
         $complianceRuleId = 'compliance_rule_002';
-        
+
         $request->setRuleId($complianceRuleId);
-        
+
         $options = $request->getRequestOptions();
-        $this->assertSame($complianceRuleId, $options['json']['rule_id']);
+        $this->assertNotNull($options);
+        $this->assertArrayHasKey('json', $options);
+        $json = $options['json'];
+        $this->assertIsArray($json);
+        $this->assertSame($complianceRuleId, $json['rule_id']);
     }
 
-    public function test_businessScenario_contentModerationCleanup(): void
+    public function testBusinessScenarioContentModerationCleanup(): void
     {
         // 测试业务场景：内容审核清理
         $request = new DeleteInterceptRuleRequest();
         $moderationRuleId = 'content_moderation_rule_003';
-        
+
         $request->setRuleId($moderationRuleId);
-        
+
         $this->assertSame($moderationRuleId, $request->getRuleId());
-        
+
         // 验证支持内容审核规则删除的参数格式
         $options = $request->getRequestOptions();
-        $this->assertArrayHasKey('rule_id', $options['json']);
+        $this->assertNotNull($options);
+        $this->assertArrayHasKey('json', $options);
+        $json = $options['json'];
+        $this->assertIsArray($json);
+        $this->assertArrayHasKey('rule_id', $json);
     }
 
-    public function test_requestDataIntegrity(): void
+    public function testRequestDataIntegrity(): void
     {
         // 测试请求数据完整性
         $request = new DeleteInterceptRuleRequest();
         $ruleId = 'integrity_test_rule_id';
-        
+
         $request->setRuleId($ruleId);
-        
+
         $options = $request->getRequestOptions();
-        
+        $this->assertNotNull($options);
+
         // 验证请求数据结构完整性
         $this->assertArrayHasKey('json', $options);
-        $this->assertSame($ruleId, $options['json']['rule_id']);
-        
+        $json = $options['json'];
+        $this->assertIsArray($json);
+        $this->assertSame($ruleId, $json['rule_id']);
+
         // 验证只包含必要的字段
         $this->assertCount(1, $options);
-        $this->assertCount(1, $options['json']);
+        $json = $options['json'];
+        $this->assertIsArray($json);
+        $this->assertCount(1, $json);
     }
 
-    public function test_ruleIdValidation(): void
+    public function testRuleIdValidation(): void
     {
         // 测试规则ID验证
         $request = new DeleteInterceptRuleRequest();
-        
+
         // 测试规则ID是必需的字符串
         $ruleId = 'validation_test_rule_id';
         $request->setRuleId($ruleId);
         $this->assertSame($ruleId, $request->getRuleId());
     }
 
-    public function test_businessScenario_batchRuleCleanup(): void
+    public function testBusinessScenarioBatchRuleCleanup(): void
     {
         // 测试业务场景：批量规则清理（单个请求）
         $request = new DeleteInterceptRuleRequest();
         $batchRuleId = 'batch_cleanup_rule_001';
-        
+
         $request->setRuleId($batchRuleId);
-        
+
         $this->assertSame($batchRuleId, $request->getRuleId());
-        
+
         $options = $request->getRequestOptions();
-        $this->assertSame($batchRuleId, $options['json']['rule_id']);
-        
+        $this->assertNotNull($options);
+        $this->assertArrayHasKey('json', $options);
+        $json = $options['json'];
+        $this->assertIsArray($json);
+        $this->assertSame($batchRuleId, $json['rule_id']);
+
         // 验证API支持单个规则删除
         $this->assertStringContainsString('del_intercept_rule', $request->getRequestPath());
     }
 
-    public function test_ruleIdFormats(): void
+    public function testRuleIdFormats(): void
     {
         // 测试规则ID格式
         $request = new DeleteInterceptRuleRequest();
@@ -372,41 +442,53 @@ class DeleteInterceptRuleRequestTest extends TestCase
             'rule123456',
             'UPPERCASE_RULE_ID',
         ];
-        
+
         foreach ($formats as $format) {
             $request->setRuleId($format);
             $this->assertSame($format, $request->getRuleId());
-            
+
             $options = $request->getRequestOptions();
-            $this->assertSame($format, $options['json']['rule_id']);
+            $this->assertNotNull($options);
+            $this->assertArrayHasKey('json', $options);
+            $json = $options['json'];
+            $this->assertIsArray($json);
+            $this->assertSame($format, $json['rule_id']);
         }
     }
 
-    public function test_requestMethodCorrectness(): void
+    public function testRequestMethodCorrectness(): void
     {
         // 测试请求方法正确性（如果有的话）
         $request = new DeleteInterceptRuleRequest();
-        
+
         // 验证这是一个ApiRequest实例
         $this->assertInstanceOf(ApiRequest::class, $request);
     }
 
-    public function test_ruleIdPersistence(): void
+    public function testRuleIdPersistence(): void
     {
         // 测试规则ID持久性
         $request = new DeleteInterceptRuleRequest();
         $ruleId = 'persistence_test_rule_id';
-        
+
         $request->setRuleId($ruleId);
-        
+
         // 多次获取应保持一致
         $this->assertSame($ruleId, $request->getRuleId());
-        
+
         $options = $request->getRequestOptions();
-        $this->assertSame($ruleId, $options['json']['rule_id']);
-        
+        $this->assertNotNull($options);
+        $this->assertArrayHasKey('json', $options);
+        $json = $options['json'];
+        $this->assertIsArray($json);
+        $this->assertSame($ruleId, $json['rule_id']);
+
         // 再次获取选项应保持一致
         $optionsAgain = $request->getRequestOptions();
+        $this->assertNotNull($optionsAgain);
+        $this->assertIsArray($optionsAgain);
+        $this->assertArrayHasKey('json', $optionsAgain);
+        $this->assertIsArray($optionsAgain['json']);
         $this->assertSame($ruleId, $optionsAgain['json']['rule_id']);
     }
-} 
+}

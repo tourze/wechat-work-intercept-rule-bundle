@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WechatWorkInterceptRuleBundle\Request;
 
 use HttpClientBundle\Request\ApiRequest;
@@ -23,6 +25,9 @@ class GetInterceptRuleDetailRequest extends ApiRequest
         return '/cgi-bin/externalcontact/get_intercept_rule';
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function getRequestOptions(): ?array
     {
         return [
