@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace WechatWorkInterceptRuleBundle\Tests\Request;
 
 use HttpClientBundle\Request\ApiRequest;
+use HttpClientBundle\Test\RequestTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
-use HttpClientBundle\Tests\Request\RequestTestCase;
 use Tourze\WechatWorkContracts\AgentInterface;
 use WechatWorkBundle\Request\AgentAware;
 use WechatWorkInterceptRuleBundle\Request\GetInterceptRuleDetailRequest;
