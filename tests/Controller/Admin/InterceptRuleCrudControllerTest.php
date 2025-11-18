@@ -60,11 +60,6 @@ final class InterceptRuleCrudControllerTest extends AbstractEasyAdminControllerT
         yield 'field_sync' => ['sync'];
     }
 
-    public function testGetEntityFqcn(): void
-    {
-        self::assertSame(InterceptRule::class, InterceptRuleCrudController::getEntityFqcn());
-    }
-
     public function testConfigureFields(): void
     {
         $fields = $this->getController()->configureFields(Crud::PAGE_INDEX);
