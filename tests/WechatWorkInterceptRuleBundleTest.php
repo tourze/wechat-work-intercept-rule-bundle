@@ -9,10 +9,7 @@ use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use Tourze\PHPUnitSymfonyKernelTest\AbstractBundleTestCase;
 use WechatWorkInterceptRuleBundle\WechatWorkInterceptRuleBundle;
 
-/**
- * @internal
- * @phpstan-ignore symplify.forbiddenExtendOfNonAbstractClass
- */
+
 #[CoversClass(WechatWorkInterceptRuleBundle::class)]
 #[RunTestsInSeparateProcesses]
 final class WechatWorkInterceptRuleBundleTest extends AbstractBundleTestCase

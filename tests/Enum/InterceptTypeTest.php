@@ -92,7 +92,6 @@ final class InterceptTypeTest extends AbstractEnumTestCase
     #[TestWith(['0'])]
     public function testTryFromInvalidInputReturnsNull(mixed $invalidInput): void
     {
-        /** @phpstan-ignore argument.type */
         $result = InterceptType::tryFrom($invalidInput);
         $this->assertNull($result);
     }
